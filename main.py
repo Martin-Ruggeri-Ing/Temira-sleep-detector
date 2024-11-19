@@ -116,6 +116,7 @@ class SleepDetector:
     
     def encriptar_archivo(self, clave_publica):
         TAM_BLOQUE = 200  # Tamaño del bloque en bytes
+        encriptado_exitoso = False
 
         with open(self.logs_temira_csv, 'rb') as archivo_csv:
             with open('logs/logs_enc.csv', 'wb') as archivo_encriptado:
@@ -126,6 +127,10 @@ class SleepDetector:
 
                     contenido_encriptado = rsa.encrypt(bloque, clave_publica)
                     archivo_encriptado.write(contenido_encriptado)
+                encriptado_exitoso = True
+
+        if encriptado_exitoso:
+            os.remove(self.logs_temira_csv)
 
     def format_image(self, frame):
         # Se convierte el frame a escala de grises
