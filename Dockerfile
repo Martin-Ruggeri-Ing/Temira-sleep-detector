@@ -19,7 +19,7 @@ COPY app/ /app/
 COPY sound/ /sound/
 COPY haarcascades/ /haarcascades/
 COPY logs/ /logs/
-COPY requirements_app.txt .
+COPY requirements.txt .
 COPY main.py .
 COPY paths.py .
 
