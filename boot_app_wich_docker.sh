@@ -7,11 +7,4 @@ sudo docker build -t temira-sleep-detector:latest .
 sudo xhost +
 
 # Ejecuta el contenedor utilizando la imagen creada
-sudo docker run --rm \
-  --device=/dev/video0:/dev/video0 \
-  --device /dev/snd \
-  -e DISPLAY=$DISPLAY \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -v /dev/shm:/dev/shm \
-  -v $(pwd)/logs:/app/logs \  # Montar el directorio "logs" en el contenedor
-  -it temira-sleep-detector:latest
+sudo docker run --rm --device=/dev/video0:/dev/video0 --device /dev/snd -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/shm:/dev/shm -v $(pwd)/logs:/app/logs -it temira-sleep-detector:latest
