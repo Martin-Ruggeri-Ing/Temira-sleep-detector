@@ -27,7 +27,7 @@ COPY paths.py .
 RUN pip install --upgrade pip==23.1.2
 
 # Instalar las dependencias especificadas en requirements.txt
-RUN pip install --no-cache-dir -r requirements_app.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Establecer las variables de entorno para evitar problemas de visualización
 ENV DISPLAY=:0
