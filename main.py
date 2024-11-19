@@ -35,7 +35,7 @@ class SleepDetector:
         self.inicio = time.strftime("%d-%m-%Y %H:%M:%S")
         self.causa = "On"
         self.registros.append([self.inicio, self.inicio, self.causa])
-        self.logs_temira_csv = logs_path + 'logs_temira.csv'
+        self.logs_temira_csv = logs_path + 'logs_temira_' + self.inicio +'.csv'
         # Se crea una ventana de Tkinter
         self.root = tk.Tk()
         self.root.title("Detector de Somnolencia")
