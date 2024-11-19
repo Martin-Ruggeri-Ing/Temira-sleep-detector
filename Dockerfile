@@ -11,17 +11,11 @@ RUN apt-get update && apt-get install -y \
     libxi6 \
     alsa-utils
 
-# Establecer el directorio de trabajo dentro del contenedor como la raíz
-WORKDIR /
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /app
 
 # Copiar los archivos de la aplicación al contenedor
-COPY app/ /app/
-COPY sound/ /sound/
-COPY haarcascades/ /haarcascades/
-COPY logs/ /logs/
-COPY requirements.txt .
-COPY main.py .
-COPY paths.py .
+COPY . /app
 
 # Actualizar pip a la versión especificada
 RUN pip install --upgrade pip==23.1.2
