@@ -36,6 +36,7 @@ class SleepDetector:
         self.causa = "On"
         self.registros.append([self.inicio, self.inicio, self.causa])
         self.logs_temira_csv = logs_path + 'logs_temira_' + self.inicio +'.csv'
+        self.logs_temira_enc = logs_path + 'logs_temira_' + self.inicio +'_enc.csv'
         # Se crea una ventana de Tkinter
         self.root = tk.Tk()
         self.root.title("Detector de Somnolencia")
@@ -119,7 +120,7 @@ class SleepDetector:
         encriptado_exitoso = False
 
         with open(self.logs_temira_csv, 'rb') as archivo_csv:
-            with open('logs/logs_enc.csv', 'wb') as archivo_encriptado:
+            with open(self.logs_temira_enc, 'wb') as archivo_encriptado:
                 while True:
                     bloque = archivo_csv.read(TAM_BLOQUE)
                     if len(bloque) == 0:
