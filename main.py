@@ -6,10 +6,11 @@ from generar_clave import leer_clave
 import time
 import csv
 import os
-from paths import logs_path, sound_path, face_cascade_path, eye_cascade_path
+from paths import logs_path, sound_path, face_cascade_path, eye_cascade_path, checksum_path
 import tkinter as tk
 from PIL import Image, ImageTk
 import rsa
+import hashlib
 
 
 class SleepDetector:
@@ -35,8 +36,8 @@ class SleepDetector:
         self.inicio = time.strftime("%d-%m-%Y %H:%M:%S")
         self.causa = "On"
         self.registros.append([self.inicio, self.inicio, self.causa])
-        self.logs_temira_csv = logs_path + 'logs_temira_' + self.inicio +'.csv'
-        self.logs_temira_enc = logs_path + 'logs_temira_' + self.inicio +'_enc.csv'
+        self.logs_temira_csv = logs_path + 'logs_temira.csv'
+        self.logs_temira_enc = logs_path + 'logs_temira_enc.csv'
         # Se crea una ventana de Tkinter
         self.root = tk.Tk()
         self.root.title("Detector de Somnolencia")
@@ -110,17 +111,19 @@ class SleepDetector:
                 writer.writerow(["inicio", "fin", "causa"])
         with open(self.logs_temira_csv, "a", newline="") as file:
             writer = csv.writer(file)
-            for registro in self.registros:
-                writer.writerow(registro)
+            writer.writerows(self.registros)
         clave_publica = leer_clave('publica')
-        self.encriptar_archivo(clave_publica)
-    
-    def encriptar_archivo(self, clave_publica):
-        TAM_BLOQUE = 200  # Tamaño del bloque en bytes
-        encriptado_exitoso = False
+        checksum = self.calcular_checksum(self.logs_temira_csv)
+        self.encriptar_archivo(clave_publica, checksum)
+
+    def encriptar_archivo(self, clave_publica, checksum):
+        TAM_BLOQUE = 245  # Tamaño del bloque en bytes
 
         with open(self.logs_temira_csv, 'rb') as archivo_csv:
             with open(self.logs_temira_enc, 'wb') as archivo_encriptado:
+                # Escribir el checksum como metadatos en la cabecera del archivo encriptado
+                archivo_encriptado.write(f"checksum:{checksum}\n".encode())
+
                 while True:
                     bloque = archivo_csv.read(TAM_BLOQUE)
                     if len(bloque) == 0:
@@ -128,10 +131,28 @@ class SleepDetector:
 
                     contenido_encriptado = rsa.encrypt(bloque, clave_publica)
                     archivo_encriptado.write(contenido_encriptado)
-                encriptado_exitoso = True
 
-        if encriptado_exitoso:
-            os.remove(self.logs_temira_csv)
+    def calcular_checksum(self, file_path):
+        hash_md5 = hashlib.md5()
+        with open(file_path, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()[:8] 
+
+    def guardar_checksum(self, checksum):
+        checksum_csv = checksum_path + 'checksum.csv'
+        # Verificar si el archivo existe
+        if not os.path.exists(checksum_csv):
+            # Si no existe, crear el archivo y escribir el encabezado
+            with open(checksum_csv, "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(["fecha", "checksum"])
+        # Agregar el registro al archivo
+        with open(checksum_csv, "a", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow([time.strftime("%d-%m-%Y %H:%M:%S"), checksum])
+    
+
 
     def format_image(self, frame):
         # Se convierte el frame a escala de grises
