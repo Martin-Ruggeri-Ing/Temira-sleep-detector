@@ -1,19 +1,19 @@
 #!/bin/bash
 xhost +local:
 
-sudo docker pull martinr2020/temira-sleep-detector:2.0.0
+sudo docker pull martinr2020/temira-sleep-detector:v2.0.0
 
 sudo docker run --rm \
     --device=/dev/video0:/dev/video0 \
-    --device /dev/snd \
+    --device /dev/snd:/dev/snd \
     -e DISPLAY=$DISPLAY \
-    -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
+    -e PULSE_SERVER=unix:/tmp/pulse-native \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
-    -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
     -v /dev/shm:/dev/shm \
     -v $(pwd)/logs:/app/logs \
     -v $(pwd)/checksum:/app/checksum \
-    --group-add audio \
+    -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
+    -v /tmp/pulse-native:/tmp/pulse-native \
     --network host \
     -it martinr2020/temira-sleep-detector:v2.0.0
 
