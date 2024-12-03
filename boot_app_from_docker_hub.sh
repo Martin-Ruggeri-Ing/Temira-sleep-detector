@@ -1,7 +1,7 @@
 #!/bin/bash
 xhost +local:
 
-sudo docker pull martinr2020/temira-sleep-detector:v3.0.0
+sudo docker pull martinr2020/temira-sleep-detector:v4.0.0
 
 sudo docker run --rm \
     --privileged \
@@ -16,6 +16,6 @@ sudo docker run --rm \
     -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
     -v /tmp/pulse-native:/tmp/pulse-native \
     --network host \
-    -it martinr2020/temira-sleep-detector:v3.0.0
+    -it martinr2020/temira-sleep-detector:v4.0.0
 
 xhost -local:
