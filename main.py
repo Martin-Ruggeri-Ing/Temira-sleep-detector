@@ -2,11 +2,11 @@ import cv2
 from app.faceDetector import FaceDetector
 from app.eyesDetector import EyesDetector
 from app.alarm import Alarm
-from generar_clave import leer_clave
+from app.generar_clave import leer_clave
 import time
 import csv
 import os
-from paths import logs_path, sound_path, face_cascade_path, eye_cascade_path, checksum_path
+from app.paths import logs_path, sound_path, face_cascade_path, eye_cascade_path, checksum_path
 import tkinter as tk
 from PIL import Image, ImageTk
 import rsa
