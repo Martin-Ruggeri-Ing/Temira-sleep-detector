@@ -115,6 +115,7 @@ class SleepDetector:
         clave_publica = leer_clave('publica')
         checksum = self.calcular_checksum(self.logs_temira_csv)
         self.encriptar_archivo(clave_publica, checksum)
+        self.guardar_checksum(checksum)
 
     def encriptar_archivo(self, clave_publica, checksum):
         TAM_BLOQUE = 245  # Tamaño del bloque en bytes
