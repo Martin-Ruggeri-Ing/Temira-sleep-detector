@@ -1,10 +1,7 @@
 #!/bin/bash
 
 # Activar el entorno virtual
-source /ruta/a/tu/proyecto/env/bin/activate
-
-# Ir al directorio de la aplicación
-cd /ruta/a/tu/proyecto/app/
+source env/bin/activate
 
 # Ejecutar la aplicación
 python main.py
